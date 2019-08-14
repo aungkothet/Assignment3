@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Assignment3 By AKT</string>
+    <string name="total_seconds_for_timer">Total Seconds for Timer</string>
+    <string name="create_a_timer">Create A Timer</string>
+    <string name="search_on_web">Search On Web</string>
+    <string name="add_event_on_calendar">Add Event on Calendar</string>
+    <string name="capture_video">Capture Video</string>
+    <string name="select_a_contact">Select A Contact</string>
+</resources>
