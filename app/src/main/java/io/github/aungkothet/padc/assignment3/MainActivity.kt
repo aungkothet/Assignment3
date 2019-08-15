@@ -1,23 +1,15 @@
 package io.github.aungkothet.padc.assignment3
 
-import android.app.AlarmManager
-import android.app.PendingIntent
 import android.app.SearchManager
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.os.SystemClock
 import android.provider.AlarmClock
-import android.provider.CalendarContract
-import android.view.View
-import android.widget.Toast
-import java.util.*
 import android.provider.CalendarContract.Events
 import android.provider.ContactsContract
 import android.provider.MediaStore
-import android.text.format.DateFormat
+import android.support.v7.app.AppCompatActivity
+import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -49,28 +41,28 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
     }
 
-    fun startTimer(view: View){
+    fun startTimer(view: View) {
         val seconds = et_timer_seconds.text.toString()
-        if(!seconds.isNullOrBlank()){
-            val intent = Intent(AlarmClock.ACTION_SET_TIMER).apply {
-                putExtra(AlarmClock.EXTRA_LENGTH, seconds)
-                putExtra(AlarmClock.EXTRA_SKIP_UI, true)
+        if (!seconds.isBlank()) {
+            val alarmIntent = Intent(AlarmClock.ACTION_SET_TIMER).apply {
+                putExtra(AlarmClock.EXTRA_LENGTH, seconds.toInt())
+                putExtra(AlarmClock.EXTRA_SKIP_UI, false)
             }
-            if (intent.resolveActivity(packageManager) != null) {
-                startActivity(intent)
+            if (alarmIntent.resolveActivity(packageManager) != null) {
+                startActivity(alarmIntent)
             }
-        } else{
+        } else {
             et_timer_seconds.error = "Enter seconds for timer!"
         }
 
     }
 
-    fun setCalendar(view: View){
+    fun setCalendar(view: View) {
         val intent = Intent(Intent.ACTION_INSERT).apply {
             data = Events.CONTENT_URI
             putExtra(Events.TITLE, "Assignment 3, Week 3")
             putExtra(Events.EVENT_LOCATION, "PADC Myanmar")
-            putExtra(Events.DESCRIPTION,"Set by the Implicit intent for showing the result of assignment 3 week 3")
+            putExtra(Events.DESCRIPTION, "Set by the Implicit intent for showing the result of assignment 3 week 3")
         }
         if (intent.resolveActivity(packageManager) != null) {
             startActivity(intent)
@@ -85,21 +77,22 @@ class MainActivity : AppCompatActivity() {
             videoView.setVideoURI(videoUri)
             videoView.start()
         } else if (requestCode == REQUEST_SELECT_PHONE_NUMBER && resultCode == RESULT_OK) {
-            val contactUri: Uri ?= data?.data
+            val contactUri: Uri? = data?.data
             val projection: Array<String> = arrayOf(
                 ContactsContract.CommonDataKinds.Phone.NUMBER,
                 ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
                 ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME_ALTERNATIVE,
                 ContactsContract.CommonDataKinds.Phone.LAST_TIME_CONTACTED,
                 ContactsContract.CommonDataKinds.Phone.LAST_TIME_USED
-                )
-            contentResolver.query(contactUri, projection, null, null, null).use { cursor ->
+            )
+            contentResolver.query(contactUri!!, projection, null, null, null).use { cursor ->
                 if (cursor.moveToFirst()) {
                     val numberIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
                     val displayNameIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
-                    val displayNameAltIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME_ALTERNATIVE)
+                    val displayNameAltIndex =
+                        cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME_ALTERNATIVE)
 
-                    tv_contact_detail.text ="Number :: ${cursor.getString(numberIndex)}\n" +
+                    tv_contact_detail.text = "Number :: ${cursor.getString(numberIndex)}\n" +
                             "Display Name :: ${cursor.getString(displayNameIndex)}\n" +
                             "Display Name Alternate :: ${cursor.getString(displayNameAltIndex)}\n"
                 }
@@ -108,10 +101,10 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun  performWebSearch(view: View){
+    fun performWebSearch(view: View) {
         val searchText = et_web_search.text.toString()
         val intent = Intent(Intent.ACTION_WEB_SEARCH)
-        intent.putExtra(SearchManager.QUERY,searchText)
+        intent.putExtra(SearchManager.QUERY, searchText)
         startActivity(intent)
     }
 }
