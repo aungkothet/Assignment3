@@ -79,18 +79,19 @@ class MainActivity : AppCompatActivity() {
         } else if (requestCode == REQUEST_SELECT_PHONE_NUMBER && resultCode == RESULT_OK) {
             val contactUri: Uri? = data?.data
             val projection: Array<String> = arrayOf(
-                ContactsContract.CommonDataKinds.Phone.NUMBER,
-                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
-                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME_ALTERNATIVE,
-                ContactsContract.CommonDataKinds.Phone.LAST_TIME_CONTACTED,
-                ContactsContract.CommonDataKinds.Phone.LAST_TIME_USED
+                    ContactsContract.CommonDataKinds.Phone.NUMBER,
+                    ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+                    ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME_ALTERNATIVE,
+                    ContactsContract.CommonDataKinds.Phone.LAST_TIME_CONTACTED,
+                    ContactsContract.CommonDataKinds.Phone.LAST_TIME_USED
             )
-            contentResolver.query(contactUri!!, projection, null, null, null).use { cursor ->
+            contentResolver.query(contactUri!!, projection, null, null, null)
+                    .use { cursor ->
                 if (cursor.moveToFirst()) {
                     val numberIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
                     val displayNameIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
                     val displayNameAltIndex =
-                        cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME_ALTERNATIVE)
+                            cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME_ALTERNATIVE)
 
                     tv_contact_detail.text = "Number :: ${cursor.getString(numberIndex)}\n" +
                             "Display Name :: ${cursor.getString(displayNameIndex)}\n" +
